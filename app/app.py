@@ -49,14 +49,21 @@ def webhook() -> Tuple[Dict[str, str], int]:
         # Accept any content type, try to parse as JSON if possible
         try:
             payload = json.dumps(request.get_json(force=True))
-        except:
+        except Exception as e:
+            logger.warning(f"Failed to parse JSON: {str(e)}")
             payload = json.dumps({'raw_data': str(request.get_data())})
         
-        payload = json.dumps(request.json)
-        
-        with open(CSV_FILE, 'a', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow([timestamp, event_type, payload])
+        # Validate data before writing
+        if not all(isinstance(x, str) for x in [timestamp, event_type, payload]):
+            raise ValueError("All CSV fields must be strings")
+            
+        try:
+            with open(CSV_FILE, 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([timestamp, event_type, payload])
+        except IOError as e:
+            logger.error(f"Failed to write to CSV file: {str(e)}")
+            raise
         
         logger.info(f"Webhook received - Event: {event_type}")
         return {'status': 'success'}, 200
