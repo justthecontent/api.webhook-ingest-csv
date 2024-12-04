@@ -2,7 +2,7 @@ services:
   webhook-service:
     build: .
     ports:
-      - "5000:5000"
+      - "5001:5000"
     volumes:
       - webhook-data:/data
     restart: unless-stopped
