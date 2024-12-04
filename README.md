@@ -20,6 +20,20 @@ docker compose up -d
 
 The service will be available at `http://localhost:5001/webhook`
 
+## Testing
+
+The project uses pytest for testing. To run the tests:
+
+```bash
+# Install test dependencies
+pip install pytest pytest-cov
+
+# Run tests with coverage report
+python -m pytest app/test_app.py -v --cov
+```
+
+Current test coverage is at 93% with all tests passing.
+
 ## Usage
 
 Send webhook events using curl:
