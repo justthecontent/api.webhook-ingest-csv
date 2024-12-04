@@ -1,0 +1,1 @@
+A Flask microservice that logs Slack webhook events to CSV files. Features Docker deployment, persistent storage, and comprehensive test coverage.
