@@ -15,17 +15,22 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-CSV_FILE = './data/webhook_data.csv'
+CSV_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data', 'webhook_data.csv')
 CSV_HEADERS = ['timestamp', 'event_type', 'payload']
 
 # Ensure the data directory exists
-os.makedirs(os.path.dirname(CSV_FILE), exist_ok=True)
+data_dir = os.path.dirname(CSV_FILE)
+logger.info(f"Creating data directory at: {data_dir}")
+os.makedirs(data_dir, exist_ok=True)
 
 # Initialize CSV file with headers if it doesn't exist
 if not os.path.exists(CSV_FILE):
+    logger.info(f"Initializing CSV file at: {CSV_FILE}")
     with open(CSV_FILE, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(CSV_HEADERS)
+else:
+    logger.info(f"CSV file already exists at: {CSV_FILE}")
 
 @app.route('/webhook', methods=['POST'])
 def webhook() -> Tuple[Dict[str, str], int]:
