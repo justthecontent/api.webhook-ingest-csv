@@ -39,11 +39,18 @@ def webhook() -> Tuple[Dict[str, str], int]:
     """
     try:
         timestamp = datetime.now().isoformat()
-        event_type = request.headers.get('X-Slack-Event-Type', 'unknown')
+        # Get event type from any header that might contain it, default to 'unknown'
+        event_type = 'unknown'
+        for header, value in request.headers.items():
+            if 'event' in header.lower():
+                event_type = value
+                break
         
-        if not request.is_json:
-            logger.error("Received non-JSON payload")
-            return {'status': 'error', 'message': 'Payload must be JSON'}, 400
+        # Accept any content type, try to parse as JSON if possible
+        try:
+            payload = json.dumps(request.get_json(force=True))
+        except:
+            payload = json.dumps({'raw_data': str(request.get_data())})
         
         payload = json.dumps(request.json)
         
