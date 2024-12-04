@@ -72,6 +72,12 @@ The service uses the following default configuration:
 - External port: 5001
 - CSV file location: /data/webhook_data.csv
 - Data volume: webhook-data
+- Logging: INFO level with timestamp, logger name, level, and message
+
+Logs can be viewed using:
+```bash
+docker compose logs webhook-service
+```
 
 ## Docker Components
 
