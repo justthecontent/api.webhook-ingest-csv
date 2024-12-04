@@ -6,7 +6,7 @@ import json
 
 app = Flask(__name__)
 
-CSV_FILE = '/data/webhook_data.csv'
+CSV_FILE = './data/webhook_data.csv'
 CSV_HEADERS = ['timestamp', 'event_type', 'payload']
 
 # Ensure the data directory exists
